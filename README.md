@@ -1,1 +1,1 @@
-# SpotifyChartsScraper
+# Spotify Insight Generator
