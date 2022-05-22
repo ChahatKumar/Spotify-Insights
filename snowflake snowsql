@@ -1,0 +1,42 @@
+create or replace warehouse spotify_WH
+   with warehouse_size = "x-small"
+   auto_suspend = 300
+   auto_resume = true
+   initially_suspended = true;
+   
+ 
+ create or replace database spotify_DB;
+ 
+ use schema spotify_DB.public;
+ 
+ create or replace stage spotify_DB.public.spotify_stage
+    URL = <URL>
+    CREDENTIALS = ( AWS_KEY_ID = ''
+    AWS_SECRET_KEY = '')
+    file_format = ( type = 'CSV' )
+    
+ create or replace table spotify_table (
+    
+    country string,
+    song string,
+    artist string,
+    dateOfChart string,
+    streamCount integer,
+    rankOfSong integer
+    
+   );
+   
+   
+   list @spotify_DB.public.spotify_stage;
+   
+   select * from spotify_DB.public.spotify_table;
+   
+   COPY INTO spotify_table 
+    from @spotify_stage
+    file_format = ( type = 'CSV'
+    skip_header = 1 )
+    ON_ERROR = 'continue';
+    
+    
+    
+    
